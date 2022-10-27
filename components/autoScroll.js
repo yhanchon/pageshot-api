@@ -11,12 +11,13 @@ async function autoScroll(page) {
                 window.scrollBy(0, distance);
                 totalHeight += distance;
 
-                if (totalHeight >= scrollHeight - window.innerHeight) { //|| totalHeight >= 20000) {
+                if ((totalHeight >= scrollHeight - window.innerHeight) || totalHeight >= 2000) {
                     clearInterval(timer);
                     window.scrollTo(0, 0);
                     resolve();
                 }
             }, 800);
+
 
             /*
             var waitFor10Secs = new Promise((resolve2) => {

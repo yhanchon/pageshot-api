@@ -33,9 +33,11 @@ app.post("/api/pageshot", async (request, response) => {
                 hasTouch: false,
                 isLandscape: false
             });
-            await page.setUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36");
-            await page.goto(request.body.url, { waitUntil: 'networkidle0', timeout: 240000 });
+            //await page.setUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36");
+            await page.goto(request.body.url, { waitUntil: 'networkidle0', timeout: 60000 });
+            console.log("started auto scroll");
             await autoScroll(page);
+            console.log("finished auto scroll");
             const image = await page.screenshot({ fullPage: true });
             await browser.close();
 
