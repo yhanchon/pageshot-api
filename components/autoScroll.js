@@ -12,12 +12,12 @@ async function autoScroll(page) {
                 totalHeight += distance;
 
                 if ((totalHeight >= scrollHeight - window.innerHeight) || totalHeight >= 2000) {
-                    clearInterval(timer);
                     window.scrollTo(0, 0);
+                    clearInterval(timer);
                     resolve();
                 }
             }, 100);
-
+            window.scrollTo(0, 0);
         });
     });
 }
