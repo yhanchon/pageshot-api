@@ -58,8 +58,8 @@ app.post("/api/pageshot", async (request, response) => {
                 response.status(400).send("Website cannot be loaded!!");
             }
             else if (error.message.includes("Navigation timeout")) {
-                console.log("Pageshot attempt for webpage has timeout!");
-                response.status(408).send("Pageshot attempt for webpage has timeout!");
+                console.log("Pageshot for webpage has timeout!");
+                response.status(408).send("Pageshot for webpage has timeout!");
             }
             console.log(error.message);
 
