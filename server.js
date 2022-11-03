@@ -11,9 +11,14 @@ app.use(cors());
 
 app.post("/api/pageshot", async (request, response) => {
 
+    const clientIpAddr = request.headers['x-forwarded-for'];
+    var logPrefix = '[' + clientIpAddr + '] ';
+
     if (request.body.url && isURL(request.body.url)) {
 
-        console.log("\nNew Pageshot request: " + request.body.url);
+        logPrefix += '[' + request.body.url + '] ';
+        console.log(logPrefix + "Received request");
+
         const browser = await puppeteer.launch({
             args: [
                 "--disable-setuid-sandbox",
@@ -34,41 +39,39 @@ app.post("/api/pageshot", async (request, response) => {
             });
 
             //await page.setUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36");
+            console.info(logPrefix + "Loading webpage");
             await page.goto(request.body.url, { waitUntil: 'networkidle0', timeout: 60000 });
-            console.log("started auto scroll");
+            console.info(logPrefix + "Auto-scroll starting");
             await autoScroll(page);
-            console.log("finished auto scroll");
+            console.info(logPrefix + "Auto-scroll completed");
+            console.info(logPrefix + "Screenshot starting");
             const image = await page.screenshot({ fullPage: true });
-            //await browser.close();
-
-            console.log("Pageshot completed!");
+            console.info(logPrefix + "Screenshot completed");
 
             response.set('Content-Type', 'image/png');
             response.send(image);
 
-            console.log("Completed request\n");
+            console.info(logPrefix + "Request completed");
 
         } catch (error) {
-            if (error.message.includes("ERR_NAME_NOT_RESOLVED")) {
-                console.log("Unable to resolve URL to a website!!");
-                response.status(404).send("Website cannot be found!!");
+            if (error.message.includes("ERR_CERT_COMMON_NAME_INVALID")) {
+                response.status(400).send();
             }
-            else if (error.message.includes("ERR_CERT_COMMON_NAME_INVALID")) {
-                console.log("Unable to load url due to SSL cert issue!!");
-                response.status(400).send("Website cannot be loaded!!");
+            else if (error.message.includes("ERR_NAME_NOT_RESOLVED") || error.message.includes("ERR_CONNECTION_REFUSED")) {
+                response.status(404).send();
             }
             else if (error.message.includes("Navigation timeout")) {
-                console.log("Pageshot for webpage has timeout!");
-                response.status(408).send("Pageshot for webpage has timeout!");
+                response.status(408).send();
             }
-            console.log(error.message);
+            
+            console.error(logPrefix + error.message);
 
         } finally {
             await browser.close();
         }
     }
     else {
-        console.log("URL specified is invalid!");
+        console.error(logPrefix + "URL specified is invalid!");
         response.status(400).send("URL specified is invalid!");
     }
 
@@ -76,5 +79,5 @@ app.post("/api/pageshot", async (request, response) => {
 
 
 var listener = app.listen(8100, function () {
-    console.log("Pageshot service is listening on port " + listener.address().port);
+    console.info("Pageshot service is listening on port " + listener.address().port);
 });
