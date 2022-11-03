@@ -14,17 +14,16 @@ app.post("/api/pageshot", async (request, response) => {
     if (request.body.url && isURL(request.body.url)) {
 
         console.log("\nNew Pageshot request: " + request.body.url);
+        const browser = await puppeteer.launch({
+            args: [
+                "--disable-setuid-sandbox",
+                "--no-sandbox",
+            ]
+        });
         try {
-            const browser = await puppeteer.launch({
-                args: [
-                    "--disable-setuid-sandbox",
-                    "--no-sandbox",
-                ]
-            });
-
             const page = await browser.newPage();
-//            const iPhone = puppeteer.devices['iPhone 13 Pro Max landscape'];
-//            await page.emulate(iPhone);
+            //            const iPhone = puppeteer.devices['iPhone 13 Pro Max landscape'];
+            //            await page.emulate(iPhone);
 
             await page.setViewport({
                 width: 1200,
@@ -40,7 +39,7 @@ app.post("/api/pageshot", async (request, response) => {
             await autoScroll(page);
             console.log("finished auto scroll");
             const image = await page.screenshot({ fullPage: true });
-            await browser.close();
+            //await browser.close();
 
             console.log("Pageshot completed!");
 
@@ -58,7 +57,14 @@ app.post("/api/pageshot", async (request, response) => {
                 console.log("Unable to load url due to SSL cert issue!!");
                 response.status(400).send("Website cannot be loaded!!");
             }
-            console.log(error);
+            else if (error.message.includes("Navigation timeout")) {
+                console.log("Pageshot attempt for webpage has timeout!");
+                response.status(408).send("Pageshot attempt for webpage has timeout!");
+            }
+            console.log(error.message);
+
+        } finally {
+            await browser.close();
         }
     }
     else {
