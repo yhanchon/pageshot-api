@@ -12,7 +12,9 @@ app.use(cors());
 app.post("/api/pageshot", async (request, response) => {
 
     const clientIpAddr = request.headers['x-forwarded-for'] || request.socket.remoteAddress;
-    var logPrefix = '[' + clientIpAddr + '] ';
+    const clientUserAgent = request.get('user-agent');
+
+    var logPrefix = '[' + clientIpAddr + '] [' + clientUserAgent + '] ';
     
     if (request.body.url && isURL(request.body.url)) {
 
