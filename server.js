@@ -11,11 +11,9 @@ app.use(cors());
 
 app.post("/api/pageshot", async (request, response) => {
 
-    if (request.headers['x-forwarded-for'])
-        var logPrefix = '[' + request.headers['x-forwarded-for'] + '] ';
-    else
-        var logPrefix = '[' + request.socket.remoteAddress + '] ';
-
+    const clientIpAddr = request.headers['x-forwarded-for'] || request.socket.remoteAddress;
+    var logPrefix = '[' + clientIpAddr + '] ';
+    
     if (request.body.url && isURL(request.body.url)) {
 
         logPrefix += '[' + request.body.url + '] ';
