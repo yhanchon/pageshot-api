@@ -11,7 +11,7 @@ async function autoScroll(page) {
                 window.scrollBy(0, distance);
                 totalHeight += distance;
 
-                if ((totalHeight >= scrollHeight - window.innerHeight) || totalHeight >= 2000) {
+                if ((totalHeight >= scrollHeight - window.innerHeight) || totalHeight >= 20000) {
                     window.scrollTo(0, 0);
                     clearInterval(timer);
                     resolve();

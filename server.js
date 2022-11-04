@@ -62,7 +62,7 @@ app.post("/api/pageshot", async (request, response) => {
             else if (error.message.includes("ERR_NAME_NOT_RESOLVED") || error.message.includes("ERR_CONNECTION_REFUSED")) {
                 response.status(404).send();
             }
-            else if (error.message.includes("Navigation timeout")) {
+            else if (error.message.includes("ERR_TIMED_OUT") || error.message.includes("Navigation timeout")) {
                 response.status(408).send();
             }
             
