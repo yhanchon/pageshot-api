@@ -1,8 +1,8 @@
 ﻿
-async function autoScroll(page) {
-    await page.evaluate(async () => {
-        await new Promise((resolve) => {
-
+async function autoScroll(page, maxHeight) {
+    
+    await page.evaluate(async (maxHeight) => {
+        return new Promise((resolve) => {
             var totalHeight = 0;
             var distance = 100;
             var timer = setInterval(() => {
@@ -11,7 +11,7 @@ async function autoScroll(page) {
                 window.scrollBy(0, distance);
                 totalHeight += distance;
 
-                if ((totalHeight >= scrollHeight - window.innerHeight) || totalHeight >= 20000) {
+                if ((totalHeight >= scrollHeight - document.documentElement.clientHeight) || totalHeight >= maxHeight - document.documentElement.clientHeight) {
                     window.scrollTo(0, 0);
                     clearInterval(timer);
                     resolve();
@@ -19,7 +19,7 @@ async function autoScroll(page) {
             }, 100);
             window.scrollTo(0, 0);
         });
-    });
+    }, maxHeight);
 }
 
 exports.autoScroll = autoScroll;
