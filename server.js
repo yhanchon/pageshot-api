@@ -49,7 +49,7 @@ app.post("/api/pageshot", async (request, response) => {
     const clientIpAddr = request.headers['x-forwarded-for'] || request.socket.remoteAddress;
     const clientUserAgent = request.get('user-agent');
 
-    var logPrefix = '[' + clientIpAddr + '] [' + clientUserAgent + '] [' + "/api/pageshot-full" + '] ';
+    var logPrefix = '[' + clientIpAddr + '] [' + clientUserAgent + '] [' + "/api/pageshot" + '] ';
 
     if (request.body.url && isURL(request.body.url)) {
 
@@ -100,12 +100,12 @@ app.post("/api/pageshot", async (request, response) => {
             }
 
             console.info(logPrefix + "Loading webpage");
-            await page.goto(request.body.url, { waitUntil: 'networkidle2', timeout: 120000 });
+            await page.goto(request.body.url, { waitUntil: 'networkidle0', timeout: 120000 });
             response.set('Content-Type', 'image/png');
 
             if (request.body.isFullpage !== null && request.body.isFullpage) {
                 console.info(logPrefix + "Auto-scroll starting");
-                await autoScroll(page, 20000);
+                await autoScroll(page, 10000);
                 console.info(logPrefix + "Auto-scroll completed");
 
                 console.info(logPrefix + "Screenshot (full) starting");
