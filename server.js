@@ -9,12 +9,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-
 const deviceData = [
     null,
-    { "index": 0, "deviceName": "Desktop", "label": "1200x800", "browserWidth": 1200, "browserHeight": 800 },
-    { "index": 1, "deviceName": "Desktop", "label": "1920x1080", "browserWidth": 1920, "browserHeight": 1080 },
-    { "index": 2, "deviceName": "Desktop", "label": "1024x768", "browserWidth": 1024, "browserHeight": 768 },
+    { "index": 1, "deviceName": "Desktop", "label": "1200x800", "browserWidth": 1200, "browserHeight": 800, "isMobilePhone": false },
+    { "index": 2, "deviceName": "Desktop", "label": "1920x1080", "browserWidth": 1920, "browserHeight": 1080, "isMobilePhone": false },
+    { "index": 3, "deviceName": "Desktop", "label": "1024x768", "browserWidth": 1024, "browserHeight": 768, "isMobilePhone": false },
     null,
     null,
     null,
@@ -22,14 +21,14 @@ const deviceData = [
     null,
     null,
     null,
-    { "index": 11, "deviceName": "iPhone X", "label": "iPhone X", "browserWidth": 0, "browserHeight": 0 },
-    { "index": 12, "deviceName": "iPhone 13", "label": "iPhone 13", "browserWidth": 0, "browserHeight": 0 },
-    { "index": 13, "deviceName": "iPhone 13 Pro Max", "label": "iPhone 13 Pro Max", "browserWidth": 0, "browserHeight": 0 },
-    { "index": 14, "deviceName": "iPad Mini", "label": "iPad Mini", "browserWidth": 0, "browserHeight": 0 },
-    { "index": 15, "deviceName": "iPad Pro", "label": "iPad Pro", "browserWidth": 0, "browserHeight": 0 },
-    { "index": 16, "deviceName": "Galaxy S9+", "label": "Galaxy S9+", "browserWidth": 0, "browserHeight": 0 },
-    { "index": 17, "deviceName": "Galaxy Tab S4", "label": "Galaxy Tab S4", "browserWidth": 0, "browserHeight": 0 },
-    { "index": 18, "deviceName": "Pixel 5", "label": "Pixel 5", "browserWidth": 0, "browserHeight": 0 }
+    { "index": 11, "deviceName": "iPhone X", "label": "iPhone X", "browserWidth": 0, "browserHeight": 0, "isMobilePhone": true },
+    { "index": 12, "deviceName": "iPhone 13", "label": "iPhone 13", "browserWidth": 0, "browserHeight": 0, "isMobilePhone": true },
+    { "index": 13, "deviceName": "iPhone 13 Pro Max", "label": "iPhone 13 Pro Max", "browserWidth": 0, "browserHeight": 0, "isMobilePhone": true },
+    { "index": 14, "deviceName": "iPad Mini", "label": "iPad Mini", "browserWidth": 0, "browserHeight": 0, "isMobilePhone": false },
+    { "index": 15, "deviceName": "iPad Pro", "label": "iPad Pro", "browserWidth": 0, "browserHeight": 0, "isMobilePhone": false },
+    { "index": 16, "deviceName": "Galaxy S9+", "label": "Galaxy S9+", "browserWidth": 0, "browserHeight": 0, "isMobilePhone": true },
+    { "index": 17, "deviceName": "Galaxy Tab S4", "label": "Galaxy Tab S4", "browserWidth": 0, "browserHeight": 0, "isMobilePhone": false },
+    { "index": 18, "deviceName": "Pixel 5", "label": "Pixel 5", "browserWidth": 0, "browserHeight": 0, "isMobilePhone": true }
 ];
 
 const getDeviceData = (deviceName) => {
