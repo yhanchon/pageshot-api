@@ -47,19 +47,21 @@ const getDeviceData = (deviceName) => {
 app.post("/api/pageshot", async (request, response) => {
 
     const clientIpAddr = request.headers['x-forwarded-for'] || request.socket.remoteAddress;
-    const clientUserAgent = request.get('user-agent');
-
-    var logPrefix = '[' + clientIpAddr + '] [' + clientUserAgent + '] [' + "/api/pageshot" + '] ';
+    //const clientUserAgent = request.get('user-agent');
+    var logPrefix = '[' + clientIpAddr + '] ';
+    //var logPrefix = '[' + clientIpAddr + '] [' + clientUserAgent + '] ';
 
     if (request.body.url && isURL(request.body.url)) {
 
         logPrefix += '[' + request.body.url + '] ';
-        console.log(logPrefix + "Received request: " + "url: " + request.body.url + " deviceName: " + request.body.deviceName + " browserWidth: " + request.body.browserWidth + " browserHeight: " + request.body.browserHeight + " isFullpage: " + request.body.isFullpage);
+        console.log(logPrefix + "Received request: " + "url: " + request.body.url + " | deviceName: " + request.body.deviceName + " | browserWidth: " + request.body.browserWidth + " | browserHeight: " + request.body.browserHeight + " | isFullpage: " + request.body.isFullpage);
 
         const browser = await puppeteer.launch({
             args: [
                 "--disable-setuid-sandbox",
                 "--no-sandbox",
+                "--disable-dev-shm-usage",
+                "--disable-gpu"
             ]
         });
 
@@ -129,7 +131,9 @@ app.post("/api/pageshot", async (request, response) => {
             else if (error.message.includes("ERR_TIMED_OUT") || error.message.includes("Navigation timeout")) {
                 response.status(408).send();
             }
-
+            else if (error.message.includes("Unable to capture screenshot")) {
+                response.status(500).send();
+            }
             console.error(logPrefix + error.message);
 
         } finally {
