@@ -1,4 +1,8 @@
-﻿
+﻿/**
+ * @name AutoScroll function
+ *
+ * @desc Automate scrolling action for loading dynamic-loading websites
+*/
 async function autoScroll(page, maxHeight) {
     
     await page.evaluate(async (maxHeight) => {

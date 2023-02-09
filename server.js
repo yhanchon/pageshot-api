@@ -1,3 +1,8 @@
+/**
+ * @name Express Server
+ *
+ * @desc Serves the page-shot API
+*/
 const express = require('express');
 const puppeteer = require('puppeteer');
 const cors = require('cors');
@@ -9,6 +14,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
+//Details of device options - [0-10]: Desktop resolutions, [11-]: Mobile devices
 const deviceData = [
     null,
     { "index": 1, "deviceName": "Desktop", "label": "1200x800", "browserWidth": 1200, "browserHeight": 800, "isMobilePhone": false },
@@ -46,9 +52,7 @@ const getDeviceData = (deviceName) => {
 app.post("/api/pageshot", async (request, response) => {
 
     const clientIpAddr = request.headers['x-forwarded-for'] || request.socket.remoteAddress;
-    //const clientUserAgent = request.get('user-agent');
     var logPrefix = '[' + clientIpAddr + '] ';
-    //var logPrefix = '[' + clientIpAddr + '] [' + clientUserAgent + '] ';
 
     if (request.body.url && isURL(request.body.url)) {
 
